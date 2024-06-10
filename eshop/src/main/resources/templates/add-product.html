@@ -1,0 +1,81 @@
+<div>
+    <section class="jumbotron text-center mt-5 mb-2">
+        <div class="container">
+            <h1 class="jumbotron-heading">ADD NEW PRODUCT</h1>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form action="/products/add" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="name">Product Name</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               th:value="(${product} != null ? ${product.getName()} : '')"
+                               placeholder="Enter product name"
+                               required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="number" step="0.1" class="form-control" id="price" name="price"
+                               th:value="(${product} != null ? ${product.getPrice()} : '')"
+                               placeholder="Enter product price"
+                               required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity"
+                               th:value="(${product} != null ? ${product.getQuantity()} : '')"
+                               placeholder="Enter product quantity"
+                               required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">Image</label>
+                        <input type="file" class="form-control" id="image" name="image" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select name="category" id="category" class="form-control">
+                            <option
+                                th:each="cat : ${categories}"
+                                th:if="${product} != null"
+                                th:selected="${product.getCategory() != null && product.getCategory().getId == cat.getId()}"
+                                th:text="${cat.getName()}"
+                                th:value="${cat.getId()}"
+                            ></option>
+                            <option
+                                    th:each="cat : ${categories}"
+                                    th:if="${product} == null"
+                                    th:text="${cat.getName()}"
+                                    th:value="${cat.getId()}"
+                            ></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="manufacturer">Manufacturer</label>
+                        <select name="manufacturer" id="manufacturer" class="form-control">
+                            <option
+                                    th:each="man : ${manufacturers}"
+                                    th:if="${product} != null"
+                                    th:selected="${product.getManufacturer() != null && product.getManufacturer().getId == man.getId()}"
+                                    th:text="${man.getName()}"
+                                    th:value="${man.getId()}"
+                            ></option>
+                            <option
+                                    th:each="man : ${manufacturers}"
+                                    th:if="${product} == null"
+                                    th:text="${man.getName()}"
+                                    th:value="${man.getId()}"
+                            ></option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100 my-2">Submit</button>
+                    <hr/><br/>
+                    <a type="button" class="btn btn-block btn-outline-dark bg-warm w-100" href="/products">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

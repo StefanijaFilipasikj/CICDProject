@@ -1,0 +1,25 @@
+<section>
+    <div class="container" xmlns:th="http://www.thymeleaf.org">
+        <form class="form-signing mt-xl-5" method="post" action="/login">
+            <h2 class="form-signing-heading">Sign in</h2>
+            <p>
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required="" autofocus="">
+            </p>
+            <p>
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
+            </p>
+
+            <th:block th:if="${hasError}">
+                <div th:text="${error}" class="alert alert-danger"></div>
+            </th:block>
+
+            <button id="submit" class="btn btn-dark btn-padded w-100" type="submit">Sign in</button>
+        </form>
+
+        <hr/><br/><br/>
+        <p>Don't have an account?</p>
+        <a href="/register" class="btn btn-dark btn-padded w-100">Register here</a>
+    </div>
+</section>

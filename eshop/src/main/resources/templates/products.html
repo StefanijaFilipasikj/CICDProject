@@ -1,0 +1,58 @@
+<div xmlns:th="http://www.w3.org/1999/html" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <section class="jumbotron text-center mt-5 mb-2">
+        <div class="container">
+            <h1 class="jumbotron-heading">ALL PRODUCTS</h1>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row d-flex justify-content-between p-0 ms-5">
+            <div th:each="product : ${products}" class="col-4 my-4 mx-0 p-0">
+                <div class="card rounded-0 border-0 p-3" style="width: 23rem;">
+                    <img th:src="${product.getImage()}" class="card-img-top w-100" alt="img">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${product.getName()}"></h5>
+                        <p class="card-text m-0">Category: <span th:text="${product.getCategory().getName()}"></span></p>
+                        <p class="card-text m-0">Manufacturer: <span th:text="${product.getManufacturer().getName()}"></span> </p>
+                        <hr />
+                        <p class="card-text">$<span th:text="${product.getPrice()}"></span></p>
+                        <td class="text-right">
+                            <div class="d-flex justify-content-between">
+                                <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <form th:action="@{'/products/delete/{id}' (id=${product.getId()})}" th:method="post">
+                                        <button type="submit" class="btn btn-outline-dark btn-padded bg-white-tr">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </th:block>
+                                <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <a th:href="@{'/products/edit-form/{id}' (id=${product.getId()})}"
+                                       class="btn btn-outline-dark btn-padded bg-white-tr">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </a>
+                                </th:block>
+                            </div>
+                            <th:block sec:authorize="hasRole('ROLE_USER')">
+                                <form th:action="@{'/shopping-cart/add-product/{id}' (id=${product.getId()})}" th:method="post">
+                                    <button type="submit" class="btn btn-outline-dark btn-padded bg-white-tr">
+                                        <i class="fa fa-shopping-cart"></i> Add to cart
+                                    </button>
+                                </form>
+                            </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="col my-2">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <a href="/products/add-form" class="btn btn-block btn-dark w-100">Add new product</a>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+</div>
+
