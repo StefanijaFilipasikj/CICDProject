@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  app:
+    image: 'eshop:latest'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/eshopdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+  db:
+    image: "postgres"
+    container_name: "db"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=eshopdb
+    ports:
+      - "5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
