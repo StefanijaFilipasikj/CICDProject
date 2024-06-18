@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cicd-eshop-config
+  namespace: cicd
+data:
+  POSTGRES_URL: "jdbc:postgresql://cicd-eshop-postgres-service:5432/eshopdb"
+  POSTGRES_DATABASE: eshopdb
+  POSTGRES_USER: postgres
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cicd-eshop-secret
+  namespace: cicd
+type: Opaque
+data:
+  password: cGFzc3dvcmQ=
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cicd-eshop-deployment
+  namespace: cicd
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cicd-eshop
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: cicd-eshop
+    spec:
+      containers:
+        - name: cicd-eshop
+          image: sfilipasikj/cicd-project:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "1Gi"
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: cicd-eshop-config
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cicd-eshop-secret
+                  key: password
